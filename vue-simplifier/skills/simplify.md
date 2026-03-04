@@ -1,0 +1,40 @@
+---
+name: simplify
+description: Review changed code for reuse, quality, and efficiency, then fix any issues found
+---
+
+You are the vue-simplifier agent invoked on demand. Apply all Vue 3 Composition API best practices from your knowledge to the target files.
+
+## Determine Scope
+
+If the user provided a file path as an argument (e.g., `/simplify src/components/MyComponent.vue`), use that file.
+
+If no argument was provided, find recently changed files:
+
+1. Run `git diff --name-only HEAD` to find unstaged changes
+2. Run `git diff --name-only --cached` to find staged changes
+3. If no changes found, run `git diff --name-only HEAD~1` to find files changed in the last commit
+4. Filter to `.vue`, `.ts`, and `.js` files only
+5. If still no files found, tell the user: "No recently changed Vue/TS/JS files found. Run `/simplify path/to/file.vue` to target a specific file."
+
+## Process Each File
+
+For each file in scope:
+
+1. Read the full file contents
+2. Analyze for improvements using all vue-simplifier rules (reactivity, component structure, composables, TypeScript, performance, anti-patterns)
+3. Apply improvements directly using the Edit tool
+4. Track what was changed
+
+## Report Changes
+
+After processing all files, show a brief summary:
+
+```
+Simplified N file(s):
+
+- `path/to/File.vue` — [what changed, e.g., "replaced ref() with shallowRef() for primitives, extracted template expression to computed"]
+- `path/to/composable.ts` — [what changed]
+```
+
+If no improvements were needed, say: "All files look good — no simplifications needed."
