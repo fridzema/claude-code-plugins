@@ -20,13 +20,18 @@ You operate autonomously: when code is written or modified, you refine it immedi
 
 Apply these patterns when refining reactive code:
 
-- Use `shallowRef()` for primitives and opaque objects (class instances, SDK clients, DOM elements):
+- Use `ref()` for primitives — there's no deep reactivity to skip, so `shallowRef` adds no benefit:
   ```ts
-  // before
   const count = ref(0)
+  const isOpen = ref(false)
+  const name = ref('Alice')
+  ```
+
+- Use `shallowRef()` for opaque objects (class instances, SDK clients, DOM elements) where deep reactivity is wasteful:
+  ```ts
+  // before — Vue wraps internals in Proxies for no benefit
   const client = ref(new ApiClient())
   // after
-  const count = shallowRef(0)
   const client = shallowRef(new ApiClient())
   ```
 
@@ -250,11 +255,14 @@ Apply these patterns when refining reactive code:
 
 ## Performance Patterns
 
-- Use `v-once` for static content that never changes after initial render:
+- Use `v-once` for content that is truly static and will never change — not for reactive data that happens to be stable:
   ```vue
-  <!-- before — re-evaluated every render -->
-  <h1>{{ appTitle }}</h1>
-  <!-- after — rendered once, skipped in future updates -->
+  <!-- good — legal text never changes at runtime -->
+  <div v-once>
+    <h2>Terms of Service</h2>
+    <p>By using this application you agree to...</p>
+  </div>
+  <!-- bad — appTitle could be reactive, v-once would silently freeze it -->
   <h1 v-once>{{ appTitle }}</h1>
   ```
 
@@ -329,12 +337,12 @@ When you spot these in recently modified code, fix them:
 
 - **Unnecessary `this` references** (Options API leftovers) → Remove.
 
-- **`ref()` where `shallowRef()` suffices** → Simplify to `shallowRef()`:
+- **`ref()` for opaque objects** → Use `shallowRef()` instead:
   ```ts
-  // before — primitive doesn't need deep reactivity
-  const isOpen = ref(false)
+  // before — deep reactivity on a class instance is wasteful
+  const client = ref(new ApiClient())
   // after
-  const isOpen = shallowRef(false)
+  const client = shallowRef(new ApiClient())
   ```
 
 - **Manual `.value` unwrapping in templates** → Remove (templates auto-unwrap):

@@ -23,7 +23,7 @@ Convert each Options API section to its Composition API equivalent:
 
 | Options API | Composition API |
 |---|---|
-| `data()` returning primitives | `shallowRef()` per property |
+| `data()` returning primitives | `ref()` per property |
 | `data()` returning objects replaced wholesale | `ref()` per property |
 | `data()` returning objects mutated in-place | `reactive()` |
 | `computed: { prop() {} }` | `const prop = computed(() => ...)` |
@@ -51,7 +51,7 @@ Convert each Options API section to its Composition API equivalent:
 ## Apply Vue-Simplifier Rules
 
 After conversion, review the result against all vue-simplifier rules and apply any additional improvements:
-- Use `shallowRef()` for primitives and opaque objects
+- Use `ref()` for primitives, `shallowRef()` for opaque objects
 - Prefer `computed` over watcher-assigned refs
 - Use `defineModel()` where applicable (Vue 3.4+)
 - Use destructured props with defaults (Vue 3.5+)

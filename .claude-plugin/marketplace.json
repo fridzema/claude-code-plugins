@@ -11,7 +11,7 @@
       "name": "vue-simplifier",
       "source": "./vue-simplifier",
       "description": "Simplifies and refines Vue 3 code for clarity, consistency, and maintainability",
-      "version": "1.0.0",
+      "version": "1.2.0",
       "category": "productivity"
     }
   ]

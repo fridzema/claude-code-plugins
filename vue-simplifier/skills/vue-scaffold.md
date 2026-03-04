@@ -30,7 +30,7 @@ For `.vue` components, generate a complete SFC following all vue-simplifier conv
 // 2. Props with defineProps<Props>() — use destructured defaults (Vue 3.5+)
 // 3. Emits with defineEmits<Emits>() if needed
 // 4. Models with defineModel() if needed (Vue 3.4+)
-// 5. Reactive state — shallowRef() for primitives, ref() for replaced objects, reactive() for mutated objects
+// 5. Reactive state — ref() for primitives and replaced objects, reactive() for mutated objects, shallowRef() for opaque objects
 // 6. Computed properties
 // 7. Functions
 // 8. Watchers and lifecycle hooks
@@ -50,7 +50,7 @@ For `.vue` components, generate a complete SFC following all vue-simplifier conv
 Key conventions to follow:
 - `<script setup lang="ts">` always
 - Generic `defineProps<Props>()` with TypeScript interface
-- `shallowRef()` for primitives, `ref()` for replaced data, `reactive()` for mutated objects
+- `ref()` for primitives and replaced data, `reactive()` for mutated objects, `shallowRef()` for opaque objects
 - PascalCase file and component names
 - `<style scoped>` with class selectors only
 
@@ -60,7 +60,7 @@ For `.ts` composables, follow this structure:
 
 ```ts
 import { ref, readonly, computed } from 'vue'
-// Use shallowRef for primitives, ref for replaced objects, reactive for mutated objects
+// Use ref for primitives and replaced objects, reactive for mutated objects, shallowRef for opaque objects
 
 export function useComposableName(/* options object if 3+ params */): ReturnType {
   // State

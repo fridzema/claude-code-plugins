@@ -13,9 +13,11 @@ If no argument was provided, find recently changed files:
 
 1. Run `git diff --name-only HEAD` to find unstaged changes
 2. Run `git diff --name-only --cached` to find staged changes
-3. If no changes found, run `git diff --name-only HEAD~1` to find files changed in the last commit
-4. Filter to `.vue`, `.ts`, and `.js` files only
-5. If still no files found, tell the user: "No recently changed Vue/TS/JS files found. Run `/simplify path/to/file.vue` to target a specific file."
+3. Run `git ls-files --others --exclude-standard` to find untracked (newly created) files
+4. Combine and deduplicate the results
+5. If no changes found, run `git log -1 --name-only --pretty=format:""` to find files changed in the last commit
+6. Filter to `.vue`, `.ts`, and `.js` files only
+7. If still no files found, tell the user: "No recently changed Vue/TS/JS files found. Run `/simplify path/to/file.vue` to target a specific file."
 
 ## Process Each File
 
@@ -33,7 +35,7 @@ After processing all files, show a brief summary:
 ```
 Simplified N file(s):
 
-- `path/to/File.vue` — [what changed, e.g., "replaced ref() with shallowRef() for primitives, extracted template expression to computed"]
+- `path/to/File.vue` — [what changed, e.g., "replaced ref() with shallowRef() for opaque objects, extracted template expression to computed"]
 - `path/to/composable.ts` — [what changed]
 ```
 

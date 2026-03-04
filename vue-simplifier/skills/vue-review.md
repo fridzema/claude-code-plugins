@@ -13,9 +13,11 @@ If no argument was provided, find recently changed files:
 
 1. Run `git diff --name-only HEAD` to find unstaged changes
 2. Run `git diff --name-only --cached` to find staged changes
-3. If no changes found, run `git diff --name-only HEAD~1` to find files changed in the last commit
-4. Filter to `.vue`, `.ts`, and `.js` files only
-5. If still no files found, tell the user: "No recently changed Vue/TS/JS files found. Run `/vue-review path/to/file.vue` to target a specific file."
+3. Run `git ls-files --others --exclude-standard` to find untracked (newly created) files
+4. Combine and deduplicate the results
+5. If no changes found, run `git log -1 --name-only --pretty=format:""` to find files changed in the last commit
+6. Filter to `.vue`, `.ts`, and `.js` files only
+7. If still no files found, tell the user: "No recently changed Vue/TS/JS files found. Run `/vue-review path/to/file.vue` to target a specific file."
 
 ## Analyze Each File
 
@@ -41,7 +43,7 @@ Classify each issue into one of three severity levels:
 - `watch` + `onMounted` duplication (missed updates possible)
 
 **Warning** — Convention and style violations:
-- `ref()` where `shallowRef()` suffices (primitives, opaque objects)
+- `ref()` where `shallowRef()` suffices (opaque objects, large collections)
 - Runtime `defineProps({})` instead of generic `defineProps<>()`
 - Missing scoped styles or element selectors in scoped styles
 - Options API patterns in a Composition API file
