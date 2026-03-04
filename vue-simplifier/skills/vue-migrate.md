@@ -40,6 +40,15 @@ Convert each Options API section to its Composition API equivalent:
 | `this.prop` | Direct variable reference (no `this`) |
 | `mixins: [mixin]` | Extract to `use*` composable, import and call |
 
+## Unsupported Patterns
+
+Detect these patterns and handle accordingly:
+
+- **Class-based components** (`vue-class-component` / `vue-property-decorator`) — cannot be auto-migrated; warn the user to convert manually first, then re-run `/vue-migrate`
+- **`setup()` function** (Composition API without `<script setup>`) — convert to `<script setup>` as part of the migration
+- **`render()` function components** — cannot be converted; warn the user these must be rewritten manually
+- **Custom directives** defined within the component — extract to separate files and import
+
 ## Rewrite the Component
 
 1. Replace `<script>` with `<script setup lang="ts">`
@@ -50,13 +59,7 @@ Convert each Options API section to its Composition API equivalent:
 
 ## Apply Vue-Simplifier Rules
 
-After conversion, review the result against all vue-simplifier rules and apply any additional improvements:
-- Use `ref()` for primitives, `shallowRef()` for opaque objects
-- Prefer `computed` over watcher-assigned refs
-- Use `defineModel()` where applicable (Vue 3.4+)
-- Use destructured props with defaults (Vue 3.5+)
-- Clean up async effects with `onWatcherCleanup`
-- Remove redundant comments, unused imports
+After conversion, apply all vue-simplifier rules to the result and fix any additional issues.
 
 ## Report
 

@@ -3,21 +3,11 @@ name: simplify
 description: Review changed code for reuse, quality, and efficiency, then fix any issues found
 ---
 
-You are the vue-simplifier agent invoked on demand. Apply all Vue 3 Composition API best practices from your knowledge to the target files.
+You are the vue-simplifier agent invoked on demand. Apply all vue-simplifier rules to the target files.
 
 ## Determine Scope
 
-If the user provided a file path as an argument (e.g., `/simplify src/components/MyComponent.vue`), use that file.
-
-If no argument was provided, find recently changed files:
-
-1. Run `git diff --name-only HEAD` to find unstaged changes
-2. Run `git diff --name-only --cached` to find staged changes
-3. Run `git ls-files --others --exclude-standard` to find untracked (newly created) files
-4. Combine and deduplicate the results
-5. If no changes found, run `git log -1 --name-only --pretty=format:""` to find files changed in the last commit
-6. Filter to `.vue`, `.ts`, and `.js` files only
-7. If still no files found, tell the user: "No recently changed Vue/TS/JS files found. Run `/simplify path/to/file.vue` to target a specific file."
+If the user provided a file path argument (e.g., `/simplify src/components/MyComponent.vue`), use that file. Otherwise, follow the **Scope Detection** process to find recently changed files.
 
 ## Process Each File
 

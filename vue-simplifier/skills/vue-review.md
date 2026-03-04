@@ -7,30 +7,14 @@ You are the vue-simplifier agent performing a read-only code review. Analyze fil
 
 ## Determine Scope
 
-If the user provided a file path as an argument (e.g., `/vue-review src/components/MyComponent.vue`), use that file.
-
-If no argument was provided, find recently changed files:
-
-1. Run `git diff --name-only HEAD` to find unstaged changes
-2. Run `git diff --name-only --cached` to find staged changes
-3. Run `git ls-files --others --exclude-standard` to find untracked (newly created) files
-4. Combine and deduplicate the results
-5. If no changes found, run `git log -1 --name-only --pretty=format:""` to find files changed in the last commit
-6. Filter to `.vue`, `.ts`, and `.js` files only
-7. If still no files found, tell the user: "No recently changed Vue/TS/JS files found. Run `/vue-review path/to/file.vue` to target a specific file."
+If the user provided a file path argument (e.g., `/vue-review src/components/MyComponent.vue`), use that file. Otherwise, follow the **Scope Detection** process to find recently changed files.
 
 ## Analyze Each File
 
 For each file in scope:
 
-1. Read the full file contents
-2. Check every line against all vue-simplifier rule sections:
-   - **Reactivity rules** — correct ref type, toRefs usage, computed vs watcher, cleanup
-   - **Component structure** — SFC order, defineProps/defineEmits/defineModel patterns, v-if/v-for separation, scoped styles
-   - **Composable rules** — use* naming, readonly returns, options objects, MaybeRefOrGetter
-   - **TypeScript conventions** — generic defineProps, typed provide/inject, return types, no any, satisfies
-   - **Performance patterns** — v-once, v-memo, defineAsyncComponent, shallowRef for collections, markRaw
-   - **Anti-patterns** — nested ternaries, over-abstraction, redundant comments, unused imports, template .value
+1. Read the full file contents using the Read tool — use the line numbers from its output for accurate reporting
+2. Check every line against all vue-simplifier rules: reactivity, component structure, composables, TypeScript, performance, and anti-patterns
 
 ## Severity Classification
 

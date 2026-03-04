@@ -4,7 +4,7 @@
 ![license](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 ![Claude Code plugin](https://img.shields.io/badge/Claude_Code-plugin-blueviolet?style=flat-square)
 
-A Claude Code plugin that automatically refines Vue 3 Composition API code as you write it — fixing reactivity, TypeScript, and performance patterns in place, without changing behavior.
+A Claude Code plugin that refines Vue 3 Composition API code as you write it. Catches reactivity mistakes, TypeScript issues, and performance problems without changing behavior.
 
 ---
 
@@ -40,20 +40,20 @@ Without a path, `/simplify` and `/vue-review` auto-detect recently changed files
 
 ## Rules
 
-The agent runs automatically on modified files and enforces six rule categories.
+The agent runs on modified files and checks six rule categories.
 
 <details>
 <summary>View all rules</summary>
 
-**Reactivity** — `ref` for primitives; `shallowRef` for opaque objects and large collections; `ref` for replaced data; `reactive` for in-place mutations; `computed` over watcher-assigned refs; `watch` with `immediate: true` instead of duplicating in `onMounted`; `onWatcherCleanup` for async effects.
+**Reactivity** — `ref` for primitives; `shallowRef` for opaque objects and large collections; `ref` for replaced data; `reactive` for in-place mutations; `toRef`/`toRefs` for reactive property access; `computed` over watcher-assigned refs; `watch` with `immediate: true` instead of duplicating in `onMounted`; `watchEffect` for automatic dependency tracking (immediate execution only); `onWatcherCleanup` for async effects.
 
-**Component structure** — SFC order: `<script setup>` → `<template>` → `<style scoped>`; generic `defineProps<Props>()`; destructured props with defaults (Vue 3.5+); `defineModel()` for v-model (Vue 3.4+); `useTemplateRef()` for DOM refs; `v-if` and `v-for` never on the same element; complex template expressions extracted to `computed`.
+**Component structure** — SFC order: `<script setup>` → `<template>` → `<style scoped>`; generic `defineProps<Props>()`; destructured props with defaults (Vue 3.5+); `defineModel()` for v-model (Vue 3.4+); `defineEmits` with tuple syntax (Vue 3.3+); `defineSlots` for typed slots (Vue 3.3+); `defineOptions` for component options (Vue 3.3+); `defineExpose` used sparingly; generic components (Vue 3.3+); `useTemplateRef()` for DOM refs (Vue 3.5+); `useId()` for SSR-safe unique IDs (Vue 3.5+); `onErrorCaptured` for error boundaries; `v-if` and `v-for` never on the same element; complex template expressions extracted to `computed`.
 
-**Composables** — `use*` prefix; `readonly()` on exposed state; options object for 3+ params; `MaybeRefOrGetter` + `toValue()` for library-grade composables; prefer composables over renderless components.
+**Composables** — `use*` prefix; `readonly()` on exposed state; options object for 3+ params; `MaybeRefOrGetter` + `toValue()` for library-grade composables; prefer composables over renderless components; plain functions for pure utilities without Vue dependency.
 
 **TypeScript** — generic `defineProps<Props>()` over runtime declarations; `InjectionKey<T>` for typed provide/inject; explicit return types on composables; `unknown` over `any`; `satisfies` for type checking without widening.
 
-**Performance** — `v-once` for static content; `v-memo` for expensive list items; `defineAsyncComponent` for code-split heavy components; `shallowRef` for large flat collections; `markRaw()` for non-reactive objects.
+**Performance** — `v-once` for static content; `v-memo` for expensive list items; `defineAsyncComponent` for code-split routes and heavy components; `shallowRef` for large flat collections; `markRaw()` for non-reactive objects (third-party instances, SDK clients).
 
 **Anti-patterns** — nested ternaries refactored to early returns; over-abstracted one-use helpers inlined; redundant comments removed; unused imports removed; `.value` in templates removed (auto-unwrapped); `watch` + `onMounted` duplication consolidated.
 

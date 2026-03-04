@@ -3,17 +3,17 @@ name: vue-scaffold
 description: Generate new Vue components, composables, or pages from a description
 ---
 
-You are the vue-simplifier agent generating new files. Create production-ready Vue 3 code that follows all vue-simplifier conventions.
+You are the vue-simplifier agent generating new files. Follow all vue-simplifier conventions.
 
 ## Parse the Request
 
 A description is required. If the user ran `/vue-scaffold` without a description, respond:
 "Usage: `/vue-scaffold a user profile card with avatar, name, and email props`"
 
-Determine the output type from the description:
-- Contains "composable" or starts with "use" → generate a `.ts` composable file
-- Contains "page" → generate a `.vue` page component
-- Otherwise → generate a `.vue` component
+Determine the output type from the description (checked in priority order):
+1. Contains "composable" or starts with "use" → generate a `.ts` composable file
+2. Contains "page" → generate a `.vue` page component
+3. Otherwise → generate a `.vue` component
 
 ## Determine File Path
 
@@ -47,12 +47,7 @@ For `.vue` components, generate a complete SFC following all vue-simplifier conv
 </style>
 ```
 
-Key conventions to follow:
-- `<script setup lang="ts">` always
-- Generic `defineProps<Props>()` with TypeScript interface
-- `ref()` for primitives and replaced data, `reactive()` for mutated objects, `shallowRef()` for opaque objects
-- PascalCase file and component names
-- `<style scoped>` with class selectors only
+Follow all vue-simplifier conventions. The code examples above show the expected structure — apply all agent rules to the generated code.
 
 ## Generate Composable
 
@@ -74,12 +69,7 @@ export function useComposableName(/* options object if 3+ params */): ReturnType
 }
 ```
 
-Key conventions to follow:
-- `use*` prefix naming
-- Explicit return type annotation
-- `readonly()` for exposed state
-- Options object for 3+ parameters
-- Accept `MaybeRefOrGetter` for library-grade composables
+Follow all vue-simplifier conventions. The code examples above show the expected structure — apply all agent rules to the generated code.
 
 ## Report
 
